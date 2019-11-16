@@ -569,11 +569,20 @@ private:
     void emit_begin_insert_rows(const QModelIndex& parent, int first, int last)
         const noexcept override
     {
+        OT_ASSERT(first >= 0)
+        OT_ASSERT(first <= rowCount(parent))  // == is allowed, to insert at the
+                                              // end
+        OT_ASSERT(last >= first)
+
         const_cast<List&>(*this).beginInsertRows(parent, first, last);
     }
     void emit_begin_remove_rows(const QModelIndex& parent, int first, int last)
         const noexcept override
     {
+        OT_ASSERT(first >= 0)
+        OT_ASSERT(last >= first)
+        OT_ASSERT(last < rowCount(parent))
+
         const_cast<List&>(*this).beginRemoveRows(parent, first, last);
     }
     void emit_end_insert_rows() const noexcept override
@@ -589,6 +598,8 @@ private:
         OT_ASSERT(verify_lock(lock));
 
         int output{start_row_};
+        //        LogOutput(LIST_METHOD)(__FUNCTION__)
+        //            (": start_row_ is: ")(start_row_).Flush();
 
         for (const auto& [sortKey, map] : items_) {
             for (const auto& [rowID, pRow] : map) {
@@ -596,12 +607,14 @@ private:
 
                     return output;
                 } else {
+
                     ++output;
                 }
             }
         }
 
-        return -1;
+        OT_FAIL
+        //      return -1;
     }
     int find_insert_point(
         const Lock& lock,
@@ -646,6 +659,7 @@ private:
     void finish_remove_row() const noexcept
     {
 #if OT_QT
+        OT_ASSERT(row_count_ > 0)
         --row_count_;
 
         if (enable_qt_) { emit_end_remove_rows(); }
@@ -815,6 +829,20 @@ private:
 #if OT_QT
         if (enable_qt_) {
             const auto row = find_insert_point(lock, id, index);
+
+            if (row < 0) {
+                // auto& [item_id, item_box, item_custom] = id;
+
+                LogOutput(LIST_METHOD)(__FUNCTION__)(
+                    ": Row is less than zero! We used to ASSERT on this "
+                    "point.")(
+                    " Instead I'm just going to return here, though it makes "
+                    "me "
+                    " queasy. Notice also it's a void function so I have no "
+                    "way to ")("return failure. Row: ")(row)
+                    .Flush();
+            }
+            OT_ASSERT(row >= 0)
             emit_begin_insert_rows(me(), row, row);
         }
 #endif  // OT_QT
@@ -826,6 +854,20 @@ private:
 #if OT_QT
         if (enable_qt_) {
             const auto row = find_delete_point(lock, id);
+
+            if (row < 0) {
+                // auto& [item_id, item_box, item_custom] = id;
+
+                LogOutput(LIST_METHOD)(__FUNCTION__)(
+                    ": Row is less than zero! We used to ASSERT on this "
+                    "point.")(
+                    " Instead I'm just going to return here, though it makes "
+                    "me "
+                    " queasy. Notice also it's a void function so I have no "
+                    "way to ")("return failure. Row: ")(row)
+                    .Flush();
+            }
+            OT_ASSERT(row >= 0)
             emit_begin_remove_rows(me(), row, row);
         }
 #endif  // OT_QT

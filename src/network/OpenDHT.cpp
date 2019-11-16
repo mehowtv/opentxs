@@ -29,9 +29,18 @@ namespace opentxs::network::implementation
 {
 #if OT_DHT
 
+auto OpenDHT::init_node() noexcept -> std::unique_ptr<dht::DhtRunner>
+{
+    try {
+        return std::unique_ptr<dht::DhtRunner>(new dht::DhtRunner);
+    } catch (...) {
+        return {};
+    }
+}
+
 OpenDHT::OpenDHT(const DhtConfig& config)
     : config_(new DhtConfig(config))
-    , node_(new dht::DhtRunner)
+    , node_(init_node())
     , loaded_(Flag::Factory(false))
     , ready_(Flag::Factory(false))
     , init_()
@@ -61,7 +70,7 @@ bool OpenDHT::Init() const
                 static_cast<unsigned short>(listenPort),
                 dht::crypto::generateIdentity(),
                 true);
-        } catch (dht::DhtException& e) {
+        } catch (std::exception& e) {
             std::cout << e.what() << std::endl;
 
             return false;
@@ -74,7 +83,7 @@ bool OpenDHT::Init() const
         node_->bootstrap(
             config_->bootstrap_url_.c_str(), config_->bootstrap_port_.c_str());
         ready_->On();
-    } catch (std::invalid_argument& e) {
+    } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
 
         return false;
@@ -107,7 +116,11 @@ void OpenDHT::Insert(
         return;
     }
 
-    node_->put(infoHash, pValue, cb);
+    try {
+        node_->put(infoHash, pValue, cb);
+    } catch (...) {
+        return;
+    }
 }
 
 void OpenDHT::Retrieve(
@@ -141,7 +154,11 @@ void OpenDHT::Retrieve(
     dht::InfoHash infoHash = dht::InfoHash::get(
         reinterpret_cast<const std::uint8_t*>(key.c_str()), key.size());
 
-    node_->get(infoHash, cb, dcb, dht::Value::AllFilter());
+    try {
+        node_->get(infoHash, cb, dcb, dht::Value::AllFilter());
+    } catch (...) {
+        return;
+    }
 }
 
 OpenDHT::~OpenDHT()

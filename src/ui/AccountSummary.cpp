@@ -109,8 +109,7 @@ AccountSummary::AccountSummary(
 #if OT_QT
           ,
           qt,
-          Roles{{AccountSummaryQt::NotaryIDRole, "notary"},
-                {AccountSummaryQt::AccountIDRole, "account"},
+          Roles{{AccountSummaryQt::AccountIDRole, "account"},
                 {AccountSummaryQt::BalanceRole, "balance"}},
           5
 #endif

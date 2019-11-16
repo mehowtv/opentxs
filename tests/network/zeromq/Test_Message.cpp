@@ -181,9 +181,7 @@ TEST(Message, end)
 
     network::zeromq::FrameIterator it = multipartMessage->end();
     ASSERT_EQ(multipartMessage->begin(), it);
-    ASSERT_EQ(
-
-        std::distance(multipartMessage->begin(), it), 0);
+    ASSERT_EQ(std::distance(multipartMessage->begin(), it), 0);
 
     multipartMessage->AddFrame(std::string{"msg1"});
     multipartMessage->AddFrame(std::string{"msg2"});
@@ -192,7 +190,6 @@ TEST(Message, end)
     network::zeromq::FrameIterator it2 = multipartMessage->end();
     ASSERT_NE(multipartMessage->begin(), it2);
     ASSERT_EQ(
-
         std::distance(multipartMessage->begin(), it2), 3);
 }
 

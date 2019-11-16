@@ -60,9 +60,8 @@ signals:
 public:
     // Tree layout
     enum Roles {
-        NotaryIDRole = Qt::UserRole + 0,
-        AccountIDRole = Qt::UserRole + 1,
-        BalanceRole = Qt::UserRole + 2,
+        AccountIDRole = Qt::UserRole + 0,
+        BalanceRole = Qt::UserRole + 1,
     };
     enum Columns {
         IssuerNameColumn = 0,

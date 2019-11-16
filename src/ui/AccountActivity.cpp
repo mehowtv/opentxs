@@ -118,6 +118,7 @@ AccountActivity::AccountActivity(
               {AccountActivityQt::ContactsRole, "contacts"},
               {AccountActivityQt::WorkflowRole, "workflow"},
               {AccountActivityQt::TypeRole, "type"},
+              {AccountActivityQt::AmountRole, "amount"},
           },
           5
 #endif

@@ -81,7 +81,6 @@ QT_PROXY_MODEL_WRAPPER(ActivitySummaryQt, implementation::ActivitySummary)
 
 namespace opentxs::ui::implementation
 {
-
 ActivitySummary::ActivitySummary(
     const api::client::internal::Manager& api,
     const network::zeromq::socket::Publish& publisher,
@@ -99,8 +98,9 @@ ActivitySummary::ActivitySummary(
 #if OT_QT
           ,
           qt,
-          Roles{},
-          6
+          Roles{{ActivitySummaryQt::ThreadIdRole, "id"},
+                {ActivitySummaryQt::TypeRole, "type"}},
+          4
 #endif
           )
     , listeners_{{api_.Activity().ThreadPublisher(nymID),

@@ -70,6 +70,7 @@ public:
         ContactsRole = Qt::UserRole + 1,
         WorkflowRole = Qt::UserRole + 2,
         TypeRole = Qt::UserRole + 3,
+        AmountRole = Qt::UserRole + 4,
     };
     enum Columns {
         AmountColumn = 0,

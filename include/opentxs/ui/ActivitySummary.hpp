@@ -61,6 +61,17 @@ signals:
     void updated() const;
 
 public:
+    enum Roles {
+        ThreadIdRole = Qt::UserRole + 0,
+        TypeRole = Qt::UserRole + 1,
+    };
+    enum Columns {
+        DisplayNameColumn = 0,
+        DisplayTimeColumn = 1,
+        ImageURIColumn = 2,
+        TextColumn = 3,
+    };
+
     ~ActivitySummaryQt() final = default;
 
 private:
@@ -76,5 +87,5 @@ private:
     ActivitySummaryQt& operator=(const ActivitySummaryQt&) = delete;
     ActivitySummaryQt& operator=(ActivitySummaryQt&&) = delete;
 };
-#endif
-#endif
+#endif  // OT_QT || defined(Q_MOC_RUN)
+#endif  // OPENTXS_UI_ACTIVITYSUMMARY_HPP

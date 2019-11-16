@@ -61,7 +61,7 @@ QVariant ActivityThreadItem::qt_data(const int column, int role) const noexcept
                 case ActivityThreadQt::TextColumn: {
                     return Text().c_str();
                 }
-                case ActivityThreadQt::AmountColumn: {
+                case ActivityThreadQt::DisplayAmountColumn: {
                     return DisplayAmount().c_str();
                 }
                 case ActivityThreadQt::MemoColumn: {
@@ -83,6 +83,9 @@ QVariant ActivityThreadItem::qt_data(const int column, int role) const noexcept
         }
         case ActivityThreadQt::TypeRole: {
             return static_cast<int>(Type());
+        }
+        case ActivityThreadQt::AmountRole: {
+            return static_cast<unsigned long long>(Amount());
         }
         case Qt::CheckStateRole: {
             switch (column) {

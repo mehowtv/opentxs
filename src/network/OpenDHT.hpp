@@ -48,6 +48,8 @@ private:
 
     bool Init() const;
 
+    auto init_node() noexcept -> std::unique_ptr<dht::DhtRunner>;
+
     OpenDHT(const DhtConfig& config);
     OpenDHT() = delete;
     OpenDHT(const OpenDHT&) = delete;

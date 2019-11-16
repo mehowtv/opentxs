@@ -97,10 +97,11 @@ public:
     enum Roles {
         PolarityRole = Qt::UserRole + 0,
         TypeRole = Qt::UserRole + 1,
+        AmountRole = Qt::UserRole + 2,
     };
     enum Columns {
         TextColumn = 0,
-        AmountColumn = 1,
+        DisplayAmountColumn = 1,
         MemoColumn = 2,
         TimeColumn = 3,
         LoadingColumn = 4,

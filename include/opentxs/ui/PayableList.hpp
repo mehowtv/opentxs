@@ -63,6 +63,7 @@ public:
         ContactIDRole = Qt::UserRole + 0,
         SectionRole = Qt::UserRole + 1,
     };
+    enum Columns { DisplayNameColumn = 0, PaycodeColumn = 1 };
 
     ~PayableListQt() final = default;
 

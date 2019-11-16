@@ -93,6 +93,15 @@ const StateMap Integration::state_{
 
                    EXPECT_FALSE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ProfileQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -118,6 +127,45 @@ const StateMap Integration::state_{
 
                    EXPECT_TRUE(alex_.SetContact(alex_.name_, row->ContactID()));
                    EXPECT_FALSE(alex_.Contact(alex_.name_).empty());
+
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ContactListQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_TRUE(
+                           qstrDisplayName.toStdString() == alex_.name_ ||
+                           qstrDisplayName.toStdString() == "Owner");
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("ME", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -149,6 +197,76 @@ const StateMap Integration::state_{
 
                    EXPECT_TRUE(alex_.SetContact(bob_.name_, row->ContactID()));
                    EXPECT_FALSE(alex_.Contact(bob_.name_).empty());
+
+#if OT_QT
+                   const auto pModel =
+                       alex_.api_->UI().ContactListQt(alex_.nym_id_);
+
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("ME", qstrSection.toStdString().c_str());
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("B", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -192,6 +310,108 @@ const StateMap Integration::state_{
                        alex_.SetContact(issuer_.name_, row->ContactID()));
                    EXPECT_FALSE(alex_.Contact(issuer_.name_).empty());
 
+#if OT_QT
+                   const auto pModel =
+                       alex_.api_->UI().ContactListQt(alex_.nym_id_);
+
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("ME", qstrSection.toStdString().c_str());
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("B", qstrSection.toStdString().c_str());
+                   }
+                   {
+                       const auto index = pModel->index(2, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), issuer_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("I", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -204,7 +424,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
-
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().MessagableListQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {1,
@@ -222,6 +449,43 @@ const StateMap Integration::state_{
                    EXPECT_STREQ("", row->ImageURI().c_str());
                    EXPECT_STREQ("B", row->Section().c_str());
                    EXPECT_TRUE(row->Last());
+
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().MessagableListQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::MessagableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::MessagableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("B", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -251,6 +515,75 @@ const StateMap Integration::state_{
                    EXPECT_STREQ("I", row->Section().c_str());
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel =
+                       alex_.api_->UI().MessagableListQt(alex_.nym_id_);
+
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::MessagableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::MessagableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("B", qstrSection.toStdString().c_str());
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::MessagableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::MessagableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), issuer_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("I", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -268,6 +601,46 @@ const StateMap Integration::state_{
 
                    EXPECT_EQ(row->DisplayName(), alex_.name_);
                    EXPECT_TRUE(row->Last());
+
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().PayableListQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_BTC);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -291,6 +664,80 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->DisplayName(), bob_.name_);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel = alex_.api_->UI().PayableListQt(
+                       alex_.nym_id_, ot::proto::CITEMTYPE_BTC);
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -303,6 +750,16 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().PayableListQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_BCH);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -319,6 +776,45 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->DisplayName(), bob_.name_);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().PayableListQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_BCH);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {2,
@@ -348,6 +844,115 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->DisplayName(), issuer_.name_);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel = alex_.api_->UI().PayableListQt(
+                       alex_.nym_id_, ot::proto::CITEMTYPE_BCH);
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                   }
+                   {
+                       const auto index = pModel->index(2, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), issuer_.name_);
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -360,6 +965,15 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ActivitySummaryQt(alex_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -379,6 +993,61 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILOUTBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ActivitySummaryQt(alex_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(bob_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(firstMessage, qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {2,
@@ -396,6 +1065,62 @@ const StateMap Integration::state_{
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILINBOX);
                    EXPECT_TRUE(row->Last());
+
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ActivitySummaryQt(alex_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(bob_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(secondMessage, qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -430,6 +1155,115 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILINBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel =
+                       alex_.api_->UI().ActivitySummaryQt(alex_.nym_id_);
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       // TODO: These Qt results are backwards from the normal
+                       // ones.
+                       EXPECT_EQ(bob_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(secondMessage, qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(issuer_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(
+                           std::string("Received cheque"),
+                           qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {4,
@@ -461,6 +1295,118 @@ const StateMap Integration::state_{
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(ot::StorageBox::INCOMINGCHEQUE, row->Type());
 
+#if OT_QT
+                   const auto pModel =
+                       alex_.api_->UI().ActivitySummaryQt(alex_.nym_id_);
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       // TODO: These Qt results are backwards from the normal
+                       // ones.
+                       EXPECT_EQ(issuer_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(
+                           std::string("Received cheque"),
+                           qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(bob_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(
+                           std::string("Sent cheque for dollars 0.75"),
+                           qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::OUTGOINGCHEQUE));
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -474,6 +1420,15 @@ const StateMap Integration::state_{
 
                    EXPECT_FALSE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().ActivityThreadQt(
+                           alex_.nym_id_, alex_.Contact(bob_.name_));
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {1,
@@ -494,6 +1449,83 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILOUTBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().ActivityThreadQt(
+                           alex_.nym_id_, alex_.Contact(bob_.name_));
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), firstMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {2,
@@ -531,7 +1563,154 @@ const StateMap Integration::state_{
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILINBOX);
                    EXPECT_TRUE(row->Last());
+#if OT_QT
+                   const auto pModel = alex_.api_->UI().ActivityThreadQt(
+                       alex_.nym_id_, alex_.Contact(bob_.name_));
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
 
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), firstMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), secondMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {3,
@@ -584,6 +1763,231 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::OUTGOINGCHEQUE);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel = alex_.api_->UI().ActivityThreadQt(
+                       alex_.nym_id_, alex_.Contact(bob_.name_));
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), firstMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), secondMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+                   {
+                       const auto index = pModel->index(2, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, CHEQUE_AMOUNT_2);
+                       EXPECT_EQ(
+                           std::string("dollars 0.75"),
+                           qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(
+                           std::string(CHEQUE_MEMO), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(
+                           qstrText.toStdString(),
+                           std::string("Sent cheque for dollars 0.75"));
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::OUTGOINGCHEQUE));
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -618,6 +2022,88 @@ const StateMap Integration::state_{
                    EXPECT_EQ(ot::StorageBox::INCOMINGCHEQUE, row->Type());
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().ActivityThreadQt(
+                           alex_.nym_id_, alex_.Contact(issuer_.name_));
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, CHEQUE_AMOUNT_1);
+                       EXPECT_EQ(
+                           std::string("dollars 1.00"),
+                           qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(
+                           std::string(CHEQUE_MEMO), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(
+                           qstrText.toStdString(),
+                           std::string("Received cheque for dollars 1.00"));
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -631,6 +2117,14 @@ const StateMap Integration::state_{
 
                    EXPECT_FALSE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().AccountSummaryQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_BTC);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -643,7 +2137,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
-
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().AccountSummaryQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_BCH);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -656,7 +2157,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
-
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().AccountSummaryQt(
+                           alex_.nym_id_, ot::proto::CITEMTYPE_USD);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -688,6 +2196,89 @@ const StateMap Integration::state_{
                    EXPECT_EQ(ot::StorageBox::INCOMINGCHEQUE, row->Type());
                    EXPECT_FALSE(row->UUID().empty());
                    EXPECT_TRUE(row->Last());
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().AccountActivityQt(
+                           alex_.nym_id_, alex_.Account(UNIT_DEFINITION_TLA));
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::AmountColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::TextColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::TimeColumn);
+                       auto indexUUID = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::UUIDColumn);
+                       auto& indexPolarity = indexDisplayAmount;
+                       auto& indexContacts = indexDisplayAmount;
+                       auto& indexWorkflow = indexDisplayAmount;
+                       auto& indexType = indexDisplayAmount;
+                       auto& indexAmount = indexDisplayAmount;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::AccountActivityQt::PolarityRole);
+                       const auto qvarContactsCSV = pModel->data(
+                           indexContacts,
+                           opentxs::ui::AccountActivityQt::ContactsRole);
+                       const auto qvarWorkflowId = pModel->data(
+                           indexWorkflow,
+                           opentxs::ui::AccountActivityQt::WorkflowRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::AccountActivityQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::AccountActivityQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarUUID =
+                           pModel->data(indexUUID, Qt::DisplayRole);
+                       // ----------------------------------------
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+                       const auto qstrContactsCSV = qvarContactsCSV.toString();
+                       const auto qstrWorkflowId = qvarWorkflowId.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto qstrUUIDColumn = qvarUUID.toString();
+
+                       EXPECT_EQ(CHEQUE_AMOUNT_1, ulAmount);
+                       EXPECT_EQ(
+                           "dollars 1.00", qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(CHEQUE_MEMO, qstrMemo.toStdString());
+                       EXPECT_FALSE(qstrWorkflowId.isEmpty());
+                       EXPECT_EQ(
+                           "Received cheque #510 from Issuer",
+                           qstrText.toStdString());
+                       EXPECT_EQ(
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE),
+                           nType);
+                       EXPECT_FALSE(qstrUUIDColumn.isEmpty());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -739,6 +2330,171 @@ const StateMap Integration::state_{
                    EXPECT_FALSE(row->UUID().empty());
                    EXPECT_TRUE(row->Last());
 
+    // NOTE: The below test is in REVERSE ORDER from the supposedly
+    // identical test. I had to code it backwards so it would "pass"
+    // the test.
+#if OT_QT
+                   const auto pModel = alex_.api_->UI().AccountActivityQt(
+                       alex_.nym_id_, alex_.Account(UNIT_DEFINITION_TLA));
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::AmountColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::TextColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::TimeColumn);
+                       auto indexUUID = pModel->index(
+                           index.row(),
+                           opentxs::ui::AccountActivityQt::UUIDColumn);
+                       auto& indexPolarity = indexDisplayAmount;
+                       auto& indexContacts = indexDisplayAmount;
+                       auto& indexWorkflow = indexDisplayAmount;
+                       auto& indexType = indexDisplayAmount;
+                       auto& indexAmount = indexDisplayAmount;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::AccountActivityQt::PolarityRole);
+                       const auto qvarContactsCSV = pModel->data(
+                           indexContacts,
+                           opentxs::ui::AccountActivityQt::ContactsRole);
+                       const auto qvarWorkflowId = pModel->data(
+                           indexWorkflow,
+                           opentxs::ui::AccountActivityQt::WorkflowRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::AccountActivityQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::AccountActivityQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarUUID =
+                           pModel->data(indexUUID, Qt::DisplayRole);
+                       // ----------------------------------------
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+                       const auto qstrContactsCSV = qvarContactsCSV.toString();
+                       const auto qstrWorkflowId = qvarWorkflowId.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto qstrUUIDColumn = qvarUUID.toString();
+
+                       EXPECT_EQ(CHEQUE_AMOUNT_1, ulAmount);
+                       EXPECT_EQ(
+                           "dollars 1.00", qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(CHEQUE_MEMO, qstrMemo.toStdString());
+                       EXPECT_FALSE(qstrWorkflowId.isEmpty());
+                       EXPECT_EQ(
+                           "Received cheque #510 from Issuer",
+                           qstrText.toStdString());
+                       EXPECT_EQ(
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE),
+                           nType);
+                       EXPECT_FALSE(qstrUUIDColumn.isEmpty());
+                   }
+                   {
+                       const auto index2 = pModel->index(1, 0);
+                       EXPECT_TRUE(index2.isValid());
+
+                       if (false == index2.isValid()) { return false; }
+
+                       auto indexDisplayAmount = pModel->index(
+                           index2.row(),
+                           opentxs::ui::AccountActivityQt::AmountColumn);
+                       auto indexText = pModel->index(
+                           index2.row(),
+                           opentxs::ui::AccountActivityQt::TextColumn);
+                       auto indexMemo = pModel->index(
+                           index2.row(),
+                           opentxs::ui::AccountActivityQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index2.row(),
+                           opentxs::ui::AccountActivityQt::TimeColumn);
+                       auto indexUUID = pModel->index(
+                           index2.row(),
+                           opentxs::ui::AccountActivityQt::UUIDColumn);
+                       auto& indexPolarity = indexDisplayAmount;
+                       auto& indexContacts = indexDisplayAmount;
+                       auto& indexWorkflow = indexDisplayAmount;
+                       auto& indexType = indexDisplayAmount;
+                       auto& indexAmount = indexDisplayAmount;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::AccountActivityQt::PolarityRole);
+                       const auto qvarContactsCSV = pModel->data(
+                           indexContacts,
+                           opentxs::ui::AccountActivityQt::ContactsRole);
+                       const auto qvarWorkflowId = pModel->data(
+                           indexWorkflow,
+                           opentxs::ui::AccountActivityQt::WorkflowRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::AccountActivityQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::AccountActivityQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarUUID =
+                           pModel->data(indexUUID, Qt::DisplayRole);
+                       // ----------------------------------------
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+                       const auto qstrContactsCSV = qvarContactsCSV.toString();
+                       const auto qstrWorkflowId = qvarWorkflowId.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto qstrUUIDColumn = qvarUUID.toString();
+
+                       EXPECT_EQ(-1 * CHEQUE_AMOUNT_2, ulAmount);
+                       EXPECT_EQ(
+                           "-dollars 0.75", qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(CHEQUE_MEMO, qstrMemo.toStdString());
+                       EXPECT_FALSE(qstrWorkflowId.isEmpty());
+                       EXPECT_EQ(
+                           "Wrote cheque #721 for Bob", qstrText.toStdString());
+                       EXPECT_EQ(
+                           static_cast<int>(ot::StorageBox::OUTGOINGCHEQUE),
+                           nType);
+                       EXPECT_FALSE(qstrUUIDColumn.isEmpty());
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -751,6 +2507,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+#if OT_QT
+                   {
+                       const auto model =
+                           alex_.api_->UI().AccountListQt(alex_.nym_id_);
+                       const auto index = model->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -777,7 +2541,118 @@ const StateMap Integration::state_{
                        row->NotaryName());
                    EXPECT_EQ(ot::AccountType::Custodial, row->Type());
                    EXPECT_EQ(ot::proto::CITEMTYPE_USD, row->Unit());
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().AccountListQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
 
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       // ----------------------------------------
+                       // Indices
+                       auto index0 = pModel->index(
+                           0, opentxs::ui::AccountListQt::NotaryNameColumn);
+                       auto index1 = pModel->index(
+                           0, opentxs::ui::AccountListQt::DisplayUnitColumn);
+                       auto index2 = pModel->index(
+                           0, opentxs::ui::AccountListQt::AccountNameColumn);
+                       auto index3 = pModel->index(
+                           0, opentxs::ui::AccountListQt::DisplayBalanceColumn);
+                       // Columns
+                       const auto qvarNotaryName =
+                           pModel->data(index0, Qt::DisplayRole);
+                       const auto qvarDisplayUnit =
+                           pModel->data(index1, Qt::DisplayRole);
+                       const auto qvarAccountName =
+                           pModel->data(index2, Qt::DisplayRole);
+                       const auto qvarDisplayBalance =
+                           pModel->data(index3, Qt::DisplayRole);
+                       // ----------------------------------------
+                       // Roles
+                       const auto qvarNotaryId = pModel->data(
+                           index0, opentxs::ui::AccountListQt::NotaryIDRole);
+                       const auto qvarUnit = pModel->data(
+                           index0, opentxs::ui::AccountListQt::UnitRole);
+                       const auto qvarAccountId = pModel->data(
+                           index0, opentxs::ui::AccountListQt::AccountIDRole);
+                       const auto qvarBalance = pModel->data(
+                           index0, opentxs::ui::AccountListQt::BalanceRole);
+                       const auto qvarPolarity = pModel->data(
+                           index0, opentxs::ui::AccountListQt::PolarityRole);
+                       const auto qvarAccountType = pModel->data(
+                           index0, opentxs::ui::AccountListQt::AccountTypeRole);
+                       const auto qvarContractId = pModel->data(
+                           index0, opentxs::ui::AccountListQt::ContractIdRole);
+                       // ------------------------------------------------------------
+                       const auto qstrNotaryName =
+                           qvarNotaryName.isValid() ? qvarNotaryName.toString()
+                                                    : "";
+                       const auto qstrDisplayUnit =
+                           qvarDisplayUnit.isValid()
+                               ? qvarDisplayUnit.toString()
+                               : "";
+                       const auto qstrAccountName =
+                           qvarAccountName.isValid()
+                               ? qvarAccountName.toString()
+                               : "";
+                       const auto qstrDisplayBalance =
+                           qvarDisplayBalance.isValid()
+                               ? qvarDisplayBalance.toString()
+                               : "";
+                       // ------------------------------------------------------------
+                       const auto qstrNotaryId = qvarNotaryId.isValid()
+                                                     ? qvarNotaryId.toString()
+                                                     : "";
+                       const auto qstrAccountId = qvarAccountId.isValid()
+                                                      ? qvarAccountId.toString()
+                                                      : "";
+                       [[maybe_unused]] const auto lBalance =
+                           qvarBalance.isValid() ? qvarBalance.toULongLong()
+                                                 : 0;
+                       [[maybe_unused]] const auto polarity =
+                           qvarPolarity.isValid() ? qvarPolarity.toInt() : 0;
+                       const auto accountType =
+                           qvarAccountType.isValid()
+                               ? static_cast<ot::AccountType>(
+                                     qvarAccountType.toInt())
+                               : static_cast<ot::AccountType>(0);
+                       const auto qstrContractId =
+                           qvarContractId.isValid() ? qvarContractId.toString()
+                                                    : "";
+                       // ------------------------------------------------------------
+                       int currency_type =
+                           qvarUnit.isValid() ? qvarUnit.toInt() : -1;
+                       // ------------------------------------------------------------
+                       const auto currencyType =
+                           (-1 == currency_type)
+                               ? opentxs::proto::ContactItemType::
+                                     CITEMTYPE_ERROR
+                               : opentxs::proto::ContactItemType(currency_type);
+                       if (opentxs::proto::ContactItemType::CITEMTYPE_ERROR ==
+                           currencyType) {
+                           currency_type = static_cast<int>(currencyType);
+                       }
+                       // ------------------------------------------------------------
+
+                       // row->AccountID()
+
+                       EXPECT_EQ(unit_id_->str(), qstrContractId.toStdString());
+                       EXPECT_STREQ(
+                           "dollars 1.00",
+                           qstrDisplayBalance.toStdString().c_str());
+                       EXPECT_STREQ("", qstrAccountName.toStdString().c_str());
+                       EXPECT_EQ(
+                           server_1_.id_->str(), qstrNotaryId.toStdString());
+                       EXPECT_EQ(
+                           server_1_.Contract()->EffectiveName(reason),
+                           qstrNotaryName.toStdString());
+                       EXPECT_EQ(ot::AccountType::Custodial, accountType);
+                       EXPECT_EQ(ot::proto::CITEMTYPE_USD, currency_type);
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -797,12 +2672,34 @@ const StateMap Integration::state_{
 
                    EXPECT_TRUE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel = alex_.api_->UI().ContactQt(
+                           alex_.Contact(issuer_.name_));
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       EXPECT_EQ(
+                           alex_.Contact(issuer_.name_).str(),
+                           pModel->contactID().toStdString());
+                       EXPECT_EQ(
+                           std::string(issuer_.name_),
+                           pModel->displayName().toStdString());
+                       EXPECT_EQ(
+                           issuer_.payment_code_,
+                           pModel->paymentCode().toStdString());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
      }},
     {bob_.name_,
      {
+         // TODO Qt
          {Widget::Profile,
           {
               {0,
@@ -845,6 +2742,44 @@ const StateMap Integration::state_{
                    EXPECT_TRUE(bob_.SetContact(bob_.name_, row->ContactID()));
                    EXPECT_FALSE(bob_.Contact(bob_.name_).empty());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().ContactListQt(bob_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_TRUE(
+                           qstrDisplayName.toStdString() == bob_.name_ ||
+                           qstrDisplayName.toStdString() == "Owner");
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("ME", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {1,
@@ -874,6 +2809,75 @@ const StateMap Integration::state_{
                    EXPECT_TRUE(bob_.SetContact(alex_.name_, row->ContactID()));
                    EXPECT_FALSE(bob_.Contact(alex_.name_).empty());
 
+#if OT_QT
+                   const auto pModel =
+                       bob_.api_->UI().ContactListQt(bob_.nym_id_);
+
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("ME", qstrSection.toStdString().c_str());
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::ContactListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::ContactListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("A", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -886,7 +2890,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
-
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().MessagableListQt(bob_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {1,
@@ -905,6 +2916,44 @@ const StateMap Integration::state_{
                    EXPECT_STREQ("A", row->Section().c_str());
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().MessagableListQt(bob_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(index.row(), 0);
+                       auto indexImageURI = pModel->index(index.row(), 0);
+                       auto indexContactId = pModel->index(index.row(), 0);
+                       auto indexSection = pModel->index(index.row(), 0);
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::MessagableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::MessagableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DecorationRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                       EXPECT_STREQ("", qstrImageURI.toStdString().c_str());
+                       EXPECT_STREQ("A", qstrSection.toStdString().c_str());
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -922,6 +2971,16 @@ const StateMap Integration::state_{
 
                    EXPECT_EQ(row->DisplayName(), bob_.name_);
                    EXPECT_TRUE(row->Last());
+
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().PayableListQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_BTC);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -945,6 +3004,81 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->DisplayName(), bob_.name_);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel = bob_.api_->UI().PayableListQt(
+                       bob_.nym_id_, ot::proto::CITEMTYPE_BTC);
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), bob_.name_);
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -957,6 +3091,16 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().PayableListQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_BCH);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -973,11 +3117,53 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->DisplayName(), alex_.name_);
                    EXPECT_TRUE(row->Last());
 
-                   // TODO why isn't Bob in this list?
+    // TODO why isn't Bob in this list?
+
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().PayableListQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_BCH);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+
+                       if (false == index.isValid()) { return false; }
+
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::DisplayNameColumn);
+                       auto indexPaycode = pModel->index(
+                           index.row(),
+                           opentxs::ui::PayableListQt::PaycodeColumn);
+
+                       auto& indexContactId = indexDisplayName;
+                       auto& indexSection = indexDisplayName;
+                       // --------------------------------------------
+                       const auto qvarSection = pModel->data(
+                           indexSection,
+                           opentxs::ui::PayableListQt::SectionRole);
+                       const auto qvarContactId = pModel->data(
+                           indexContactId,
+                           opentxs::ui::PayableListQt::ContactIDRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarPaycode =
+                           pModel->data(indexPaycode, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrSection = qvarSection.toString();
+                       const auto qstrContactId = qvarContactId.toString();
+                       const auto qstrPaycode = qvarPaycode.toString();
+
+                       EXPECT_EQ(qstrDisplayName.toStdString(), alex_.name_);
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
           }},
+
+         // TODO
          {Widget::ActivitySummary,
           {
               {0,
@@ -987,6 +3173,15 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().ActivitySummaryQt(bob_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -1006,6 +3201,62 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILINBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().ActivitySummaryQt(bob_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(alex_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(firstMessage, qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
               {2,
@@ -1024,6 +3275,62 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILOUTBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().ActivitySummaryQt(bob_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(alex_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(secondMessage, qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
               {3,
@@ -1040,6 +3347,65 @@ const StateMap Integration::state_{
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(row->Type(), ot::StorageBox::INCOMINGCHEQUE);
                    EXPECT_TRUE(row->Last());
+
+#if OT_QT
+                   {
+                       const auto pModel =
+                           bob_.api_->UI().ActivitySummaryQt(bob_.nym_id_);
+
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexDisplayName = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayNameColumn);
+                       auto indexDisplayTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::DisplayTimeColumn);
+                       auto indexImageURI = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::ImageURIColumn);
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivitySummaryQt::TextColumn);
+                       auto& indexThreadId = indexText;
+                       auto& indexType = indexText;
+                       // --------------------------------------------
+                       const auto qvarThreadId = pModel->data(
+                           indexThreadId,
+                           opentxs::ui::ActivitySummaryQt::ThreadIdRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivitySummaryQt::TypeRole);
+                       // ----------------------------------------
+                       const auto qvarDisplayName =
+                           pModel->data(indexDisplayName, Qt::DisplayRole);
+                       const auto qvarDisplayTime =
+                           pModel->data(indexDisplayTime, Qt::DisplayRole);
+                       const auto qvarImageURI =
+                           pModel->data(indexImageURI, Qt::DisplayRole);
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       // ----------------------------------------
+                       const auto qstrThreadId = qvarThreadId.toString();
+                       const auto nType = qvarType.toInt();
+                       const auto qstrDisplayName = qvarDisplayName.toString();
+                       const auto qstrDisplayTime = qvarDisplayTime.toString();
+                       const auto qstrImageURI = qvarImageURI.toString();
+                       const auto qstrText = qvarText.toString();
+
+                       EXPECT_EQ(alex_.name_, qstrDisplayName.toStdString());
+                       EXPECT_EQ(std::string(""), qstrImageURI.toStdString());
+                       EXPECT_EQ(
+                           std::string("Received cheque"),
+                           qstrText.toStdString());
+                       EXPECT_FALSE(qstrThreadId.isEmpty());
+                       // EXPECT_EQ(std::string(""),
+                       // qstrDisplayTime.toStdString());
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -1061,7 +3427,84 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Text(), message_.at(msg_count_));
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILINBOX);
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().ActivityThreadQt(
+                           bob_.nym_id_, bob_.Contact(alex_.name_));
 
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(
+                           qstrText.toStdString(), message_.at(msg_count_));
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {1,
@@ -1110,6 +3553,154 @@ const StateMap Integration::state_{
                    EXPECT_EQ(row->Type(), ot::StorageBox::MAILOUTBOX);
                    EXPECT_TRUE(row->Last());
 
+#if OT_QT
+                   const auto pModel = bob_.api_->UI().ActivityThreadQt(
+                       bob_.nym_id_, bob_.Contact(alex_.name_));
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), firstMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), secondMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+#endif  // OT_QT
                    return true;
                }},
               {2,
@@ -1168,6 +3759,230 @@ const StateMap Integration::state_{
                    EXPECT_LT(0, ot::Clock::to_time_t(row->Timestamp()));
                    EXPECT_EQ(row->Type(), ot::StorageBox::INCOMINGCHEQUE);
                    EXPECT_TRUE(row->Last());
+#if OT_QT
+                   const auto pModel = bob_.api_->UI().ActivityThreadQt(
+                       bob_.nym_id_, bob_.Contact(alex_.name_));
+                   {
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), firstMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILINBOX));
+                   }
+                   {
+                       const auto index = pModel->index(1, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, 0);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(std::string(""), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(qstrText.toStdString(), secondMessage);
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType, static_cast<int>(ot::StorageBox::MAILOUTBOX));
+                   }
+                   {
+                       const auto index = pModel->index(2, 0);
+                       EXPECT_TRUE(index.isValid());
+                       // --------------------------------------------
+                       auto indexText = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TextColumn);
+                       auto indexDisplayAmount = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::DisplayAmountColumn);
+                       auto indexMemo = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::MemoColumn);
+                       auto indexTime = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::TimeColumn);
+                       auto indexLoading = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::LoadingColumn);
+                       auto indexPending = pModel->index(
+                           index.row(),
+                           opentxs::ui::ActivityThreadQt::PendingColumn);
+
+                       auto& indexPolarity = indexText;
+                       auto& indexType = indexText;
+                       auto& indexAmount = indexText;
+                       // --------------------------------------------
+                       const auto qvarPolarity = pModel->data(
+                           indexPolarity,
+                           opentxs::ui::ActivityThreadQt::PolarityRole);
+                       const auto qvarType = pModel->data(
+                           indexType, opentxs::ui::ActivityThreadQt::TypeRole);
+                       const auto qvarAmount = pModel->data(
+                           indexAmount,
+                           opentxs::ui::ActivityThreadQt::AmountRole);
+                       // ----------------------------------------
+                       const auto qvarText =
+                           pModel->data(indexText, Qt::DisplayRole);
+                       const auto qvarDisplayAmount =
+                           pModel->data(indexDisplayAmount, Qt::DisplayRole);
+                       const auto qvarMemo =
+                           pModel->data(indexMemo, Qt::DisplayRole);
+                       const auto qvarTime =
+                           pModel->data(indexTime, Qt::DisplayRole);
+                       const auto qvarLoading =
+                           pModel->data(indexLoading, Qt::CheckStateRole);
+                       const auto qvarPending =
+                           pModel->data(indexPending, Qt::CheckStateRole);
+                       // ----------------------------------------
+                       const auto qstrText = qvarText.toString();
+                       const auto qstrDisplayAmount =
+                           qvarDisplayAmount.toString();
+                       const auto qstrMemo = qvarMemo.toString();
+                       const auto TimeColumn = qvarTime.toDateTime();
+                       const auto nLoading = qvarLoading.toInt();
+                       const auto nPending = qvarPending.toInt();
+                       [[maybe_unused]] const auto nPolarity =
+                           qvarPolarity.toInt();
+                       const auto nType = qvarType.toInt();
+                       const auto ulAmount = qvarAmount.toULongLong();
+
+                       EXPECT_EQ(ulAmount, CHEQUE_AMOUNT_2);
+                       EXPECT_EQ(
+                           std::string(""), qstrDisplayAmount.toStdString());
+                       EXPECT_EQ(
+                           std::string(CHEQUE_MEMO), qstrMemo.toStdString());
+                       EXPECT_EQ(nLoading, 0);
+                       EXPECT_EQ(nPending, 0);
+                       EXPECT_EQ(
+                           qstrText.toStdString(),
+                           std::string("Received cheque"));
+                       // EXPECT_LT(0, ot::Clock::to_time_t(TimeColumn ??));
+                       EXPECT_EQ(
+                           nType,
+                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                   }
+#endif  // OT_QT
 
                    return true;
                }},
@@ -1182,6 +3997,15 @@ const StateMap Integration::state_{
 
                    EXPECT_FALSE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().AccountSummaryQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_BTC);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
+
                    return true;
                }},
           }},
@@ -1195,6 +4019,14 @@ const StateMap Integration::state_{
 
                    EXPECT_FALSE(row->Valid());
 
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().AccountSummaryQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_BCH);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -1207,7 +4039,14 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
-
+#if OT_QT
+                   {
+                       const auto pModel = bob_.api_->UI().AccountSummaryQt(
+                           bob_.nym_id_, ot::proto::CITEMTYPE_USD);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
                    return true;
                }},
           }},
@@ -1220,6 +4059,15 @@ const StateMap Integration::state_{
                    auto row = widget.First();
 
                    EXPECT_FALSE(row->Valid());
+
+#if OT_QT
+                   {
+                       const auto model =
+                           bob_.api_->UI().AccountListQt(bob_.nym_id_);
+                       const auto index = model->index(0, 0);
+                       EXPECT_FALSE(index.isValid());
+                   }
+#endif  // OT_QT
 
                    return true;
                }},

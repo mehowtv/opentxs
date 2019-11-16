@@ -125,10 +125,6 @@ auto AccountSummaryItem::qt_data(const int column, int role) const noexcept
     -> QVariant
 {
     switch (role) {
-        case AccountSummaryQt::NotaryIDRole: {
-            // TODO
-            return {};
-        }
         case AccountSummaryQt::AccountIDRole: {
             return AccountID().c_str();
         }

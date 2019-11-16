@@ -435,6 +435,7 @@ std::string ActivityThread::PaymentCode(
 bool ActivityThread::process_drafts() noexcept
 {
     Lock draftLock(decision_lock_);
+
     LogVerbose(OT_METHOD)(__FUNCTION__)(": Checking ")(draft_tasks_.size())(
         " pending sends.")
         .Flush();
@@ -442,6 +443,7 @@ bool ActivityThread::process_drafts() noexcept
 
     for (auto i = draft_tasks_.begin(); i != draft_tasks_.end();) {
         auto& [rowID, backgroundTask] = *i;
+
         auto& future = std::get<1>(backgroundTask);
         const auto status = future.wait_for(std::chrono::microseconds(1));
 
@@ -456,7 +458,16 @@ bool ActivityThread::process_drafts() noexcept
 
     Lock widgetLock(lock_);
 
-    for (const auto& id : deleted) { delete_item(widgetLock, id); }
+    for (const auto& id : deleted) {
+
+        auto& [item_id, item_box, item_custom] = id;
+
+        LogOutput(OT_METHOD)(__FUNCTION__)(
+            ": about to delete item with ActivityThreadRowID: ")(item_id->str())
+            .Flush();
+
+        delete_item(widgetLock, id);
+    }
 
     if (0 < deleted.size()) { UpdateNotify(); }
 
@@ -621,7 +632,7 @@ bool ActivityThread::SendDraft() const noexcept
     }
 
     auto task = make_blank<DraftTask>::value(api_);
-    auto& [id, otx] = task;
+    auto& [row_id, otx] = task;
     otx =
         api_.OTX().MessageContact(primary_id_, *participants_.begin(), draft_);
     const auto taskID = std::get<0>(otx);
@@ -632,16 +643,26 @@ bool ActivityThread::SendDraft() const noexcept
             .Flush();
 
         return false;
+    } else {
+        LogOutput(OT_METHOD)(__FUNCTION__)(
+            ": Succeeded queueing msg for sending, task ID: ")(taskID)
+            .Flush();
     }
 
-    id = ActivityThreadRowID{
+    row_id = ActivityThreadRowID{
         Identifier::Random(), StorageBox::DRAFT, Identifier::Factory()};
     const ActivityThreadSortKey key{std::chrono::system_clock::now(), 0};
     const CustomData custom{new std::string(draft_)};
-    const_cast<ActivityThread&>(*this).add_item(id, key, custom);
+    const_cast<ActivityThread&>(*this).add_item(row_id, key, custom);
+
+    auto& [item_id, item_box, item_custom] = row_id;
+
+    LogOutput(OT_METHOD)(__FUNCTION__)(
+        ": Added row with ActivityThreadRowID: ")(item_id->str())
+        .Flush();
 
     OT_ASSERT(1 == items_.count(key));
-    OT_ASSERT(1 == names_.count(id));
+    OT_ASSERT(1 == names_.count(row_id));
 
     draft_tasks_.emplace_back(std::move(task));
     draft_.clear();

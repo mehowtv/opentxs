@@ -177,26 +177,33 @@ std::string ActivitySummaryItem::ImageURI() const noexcept
 #if OT_QT
 QVariant ActivitySummaryItem::qt_data(const int column, int role) const noexcept
 {
-    switch (column) {
-        case 0: {
+    switch (role) {
+        case Qt::DisplayRole: {
+            switch (column) {
+                case ActivitySummaryQt::DisplayNameColumn: {
+                    return DisplayName().c_str();
+                }
+                case ActivitySummaryQt::DisplayTimeColumn: {
+                    QDateTime qdatetime;
+                    qdatetime.setSecsSinceEpoch(
+                        std::chrono::system_clock::to_time_t(Timestamp()));
+                    return qdatetime;
+                }
+                case ActivitySummaryQt::ImageURIColumn: {
+                    return ImageURI().c_str();
+                }
+                case ActivitySummaryQt::TextColumn: {
+                    return Text().c_str();
+                }
+                default: {
+                    return {};
+                }
+            }
+        }
+        case ActivitySummaryQt::ThreadIdRole: {
             return ThreadID().c_str();
         }
-        case 1: {
-            return DisplayName().c_str();
-        }
-        case 2: {
-            return ImageURI().c_str();
-        }
-        case 3: {
-            return Text().c_str();
-        }
-        case 4: {
-            QDateTime qdatetime;
-            qdatetime.setSecsSinceEpoch(
-                std::chrono::system_clock::to_time_t(Timestamp()));
-            return qdatetime;
-        }
-        case 5: {
+        case ActivitySummaryQt::TypeRole: {
             return static_cast<int>(Type());
         }
         default: {
@@ -204,7 +211,7 @@ QVariant ActivitySummaryItem::qt_data(const int column, int role) const noexcept
         }
     }
 }
-#endif
+#endif  // OT_QT
 
 void ActivitySummaryItem::reindex(
     const ActivitySummarySortKey& key,

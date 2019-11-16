@@ -240,11 +240,11 @@ QVariant BalanceItem::qt_data(const int column, int role) const noexcept
         }
         case AccountActivityQt::ContactsRole: {
             std::string contacts;
-            auto contact = Contacts().cbegin();
-
-            if (contact != Contacts().cend()) {
+            auto contactlist = Contacts();
+            auto contact = contactlist.cbegin();
+            if (contact != contactlist.cend()) {
                 contacts = *contact;
-                while (++contact != Contacts().cend()) {
+                while (++contact != contactlist.cend()) {
                     contacts += ", " + *contact;
                 }
             }
@@ -256,6 +256,9 @@ QVariant BalanceItem::qt_data(const int column, int role) const noexcept
         }
         case AccountActivityQt::TypeRole: {
             return static_cast<int>(Type());
+        }
+        case AccountActivityQt::AmountRole: {
+            return static_cast<unsigned long long>(Amount());
         }
         default: {
             return {};
