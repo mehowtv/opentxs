@@ -67,6 +67,15 @@ std::string PayableListItem::PaymentCode() const noexcept
     return payment_code_;
 }
 
+//    enum Roles {
+//        ContactIDRole = Qt::UserRole + 0,
+//        SectionRole = Qt::UserRole + 1,
+//    };
+//    enum Columns {
+//        DisplayNameColumn = 0,
+//        PaycodeColumn = 1
+//    };
+
 #if OT_QT
 QVariant PayableListItem::qt_data(const int column, int role) const noexcept
 {

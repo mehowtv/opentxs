@@ -339,6 +339,12 @@ protected:
         // pointing to it
         if (init_.load() && inner_ == item) { increment_inner(lock); }
 
+        //        auto& [item_id, item_box, item_custom] = id;
+
+        //        LogOutput(LIST_METHOD)(__FUNCTION__)
+        //            (": About to call start_remove_row for id: ")(id).
+        //        Flush();
+
         start_remove_row(lock, id);
         [[maybe_unused]] const auto* row = item->second.get();
 #if OT_QT

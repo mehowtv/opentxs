@@ -1350,8 +1350,7 @@ const StateMap Integration::state_{
                        // EXPECT_EQ(std::string(""),
                        // qstrDisplayTime.toStdString());
                        EXPECT_EQ(
-                           nType,
-                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
+                           nType,                           static_cast<int>(ot::StorageBox::INCOMINGCHEQUE));
                    }
                    {
                        const auto index = pModel->index(1, 0);
@@ -1403,8 +1402,7 @@ const StateMap Integration::state_{
                        // EXPECT_EQ(std::string(""),
                        // qstrDisplayTime.toStdString());
                        EXPECT_EQ(
-                           nType,
-                           static_cast<int>(ot::StorageBox::OUTGOINGCHEQUE));
+                           nType,                           static_cast<int>(ot::StorageBox::OUTGOINGCHEQUE));
                    }
 #endif  // OT_QT
                    return true;
