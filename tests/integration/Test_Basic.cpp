@@ -104,6 +104,21 @@ const StateMap Integration::state_{
 
                    return true;
                }},
+              {1,
+               []() -> bool {
+                   const auto& widget = alex_.api_->UI().Profile(alex_.nym_id_);
+                   auto row = widget.First();
+                   EXPECT_TRUE(row->Valid());
+#if OT_QT
+                   {
+                       const auto pModel =
+                           alex_.api_->UI().ProfileQt(alex_.nym_id_);
+                       const auto index = pModel->index(0, 0);
+                       EXPECT_TRUE(index.isValid());
+                   }
+#endif  // OT_QT
+                   return true;
+               }},
           }},
          {Widget::ContactList,
           {
@@ -4328,6 +4343,23 @@ TEST_F(Integration, payment_codes)
     alex.Release();
     bob.Release();
     issuer.Release();
+}
+
+TEST_F(Integration, email_claims)
+{
+    auto future = cb_alex_.SetCallback(
+        Widget::Profile, 1, state_.at(alex_.name_).at(Widget::Profile).at(1));
+
+    {
+        auto alex =
+            api_alex_.Wallet().mutable_Nym(alex_.nym_id_, alex_.Reason());
+        auto added = alex.AddEmail("blah@blah.com", true, true, alex_.Reason());
+
+        EXPECT_TRUE(added);
+        EXPECT_EQ(alex.BestEmail(), "blah@blah.com");
+    }
+
+    EXPECT_TRUE(future.get());
 }
 
 TEST_F(Integration, introduction_server)
