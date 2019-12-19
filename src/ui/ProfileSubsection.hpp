@@ -55,6 +55,10 @@ public:
         const ProfileSectionSortKey& key,
         const CustomData& custom) noexcept final;
 
+#if OT_QT
+    QVariant qt_data(const int column, const int role) const noexcept final;
+#endif
+
     ~ProfileSubsection() = default;
 
 private:

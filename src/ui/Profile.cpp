@@ -121,7 +121,14 @@ Profile::Profile(
           nymID
 #if OT_QT
           ,
-          qt
+          qt,
+          Roles{
+              {ProfileQt::NymIdRole, "nymid"},
+              {ProfileQt::ClaimIdRole, "claimid"},
+              {ProfileQt::PaymentCodeRole, "paymentcode"},
+              {ProfileQt::ClaimValueRole, "claimvalue"},
+          },
+          8
 #endif
           )
     , listeners_({
@@ -285,6 +292,34 @@ std::string Profile::nym_name(
 
     return {};
 }
+
+#if OT_QT
+QVariant Profile::qt_data(const int column, int role) const noexcept
+{
+    switch (role) {
+        case Qt::DisplayRole: {
+            switch (column) {
+                case ProfileQt::DisplayNameColumn: {
+                    return DisplayName().c_str();
+                }
+                default: {
+                    return {};
+                }
+            }
+        }
+
+        case ProfileQt::NymIdRole: {
+            return ID().c_str();
+        }
+        case ProfileQt::PaymentCodeRole: {
+            return PaymentCode().c_str();
+        }
+        default: {
+            return {};
+        }
+    };
+}
+#endif
 
 std::string Profile::PaymentCode() const noexcept
 {

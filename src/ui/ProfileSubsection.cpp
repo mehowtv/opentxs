@@ -156,6 +156,31 @@ std::set<ProfileSubsectionRowID> ProfileSubsection::process_group(
     return active;
 }
 
+#if OT_QT
+QVariant ProfileSubsection::qt_data(const int column, int role) const noexcept
+{
+    switch (role) {
+        case Qt::DisplayRole: {
+            switch (column) {
+                case ProfileQt::SubsectionNameColumn: {
+                    return Name("en").c_str();
+                }
+                case ProfileQt::SubsectionTypeColumn: {
+                    return "TODO SubsectionType";
+                    // return QString::fromStdString(Type());
+                }
+                default: {
+                    return {};
+                }
+            }
+        }
+        default: {
+            return {};
+        }
+    };
+}
+#endif
+
 void ProfileSubsection::reindex(
     const ProfileSectionSortKey&,
     const CustomData& custom) noexcept

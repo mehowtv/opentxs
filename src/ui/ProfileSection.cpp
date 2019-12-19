@@ -339,6 +339,31 @@ bool ProfileSection::SetValue(
     return group.SetValue(claimID, value);
 }
 
+#if OT_QT
+QVariant ProfileSection::qt_data(const int column, int role) const noexcept
+{
+    switch (role) {
+        case Qt::DisplayRole: {
+            switch (column) {
+                case ProfileQt::SectionNameColumn: {
+                    return Name("en").c_str();
+                }
+                case ProfileQt::SectionTypeColumn: {
+                    return "TODO SectionType";
+                    // return QString::fromStdString(Type());
+                }
+                default: {
+                    return {};
+                }
+            }
+        }
+        default: {
+            return {};
+        }
+    };
+}
+#endif
+
 int ProfileSection::sort_key(const ProfileSectionRowID type) noexcept
 {
     return sort_keys_.at(type.first).at(type.second);

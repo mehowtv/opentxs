@@ -160,6 +160,23 @@ signals:
     void updated() const;
 
 public:
+    // Table layout
+    enum Roles {
+        NymIdRole = Qt::UserRole + 0,
+        PaymentCodeRole = Qt::UserRole + 1,
+        ClaimIdRole = Qt::UserRole + 2,
+        ClaimValueRole = Qt::UserRole + 3,
+    };
+    enum Columns {
+        DisplayNameColumn = 0,
+        SectionNameColumn = 1,
+        SectionTypeColumn = 2,
+        SubsectionNameColumn = 3,
+        SubsectionTypeColumn = 4,
+        ClaimIsActiveColumn = 5,
+        ClaimIsPrimaryColumn = 6,
+    };
+
     // Tree layout
     OPENTXS_EXPORT QString displayName() const noexcept;
     OPENTXS_EXPORT QString nymID() const noexcept;

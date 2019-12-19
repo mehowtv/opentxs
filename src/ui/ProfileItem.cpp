@@ -82,6 +82,36 @@ Claim ProfileItem::as_claim() const noexcept
     return output;
 }
 
+#if OT_QT
+QVariant ProfileItem::qt_data(const int column, int role) const noexcept
+{
+    switch (role) {
+        case Qt::CheckStateRole: {
+            switch (column) {
+                case ProfileQt::ClaimIsActiveColumn: {
+                    return IsActive() ? Qt::Checked : Qt::Unchecked;
+                }
+                case ProfileQt::ClaimIsPrimaryColumn: {
+                    return IsPrimary() ? Qt::Checked : Qt::Unchecked;
+                }
+                default: {
+                    return {};
+                }
+            }
+        }
+        case ProfileQt::ClaimIdRole: {
+            return ClaimID().c_str();
+        }
+        case ProfileQt::ClaimValueRole: {
+            return Value().c_str();
+        }
+        default: {
+            return {};
+        }
+    };
+}
+#endif
+
 bool ProfileItem::Delete() const noexcept
 {
     auto reason = api_.Factory().PasswordPrompt(__FUNCTION__);

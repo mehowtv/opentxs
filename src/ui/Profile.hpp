@@ -62,6 +62,10 @@ public:
         const std::string& claimID,
         const std::string& value) const noexcept final;
 
+#if OT_QT
+    QVariant qt_data(const int column, const int role) const noexcept;
+#endif
+
     ~Profile();
 
 private:
